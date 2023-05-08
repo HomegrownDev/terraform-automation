@@ -1,0 +1,61 @@
+vars:
+  region: "us-east-1"
+  availability_zones: ["us-east-1a", "us-east-1b", "us-east-1c"]
+  namespace: "prv"
+  stage: "dev"
+  tenant: "infra"
+
+components:
+  terraform:
+    aws-vpc:
+      vars:
+        group: 
+          vpc: 
+            ipv4_primary_cidr_block: '172.16.0.0/16'
+            ipv4_cidr_block_association_timeouts:
+              create: "3m"
+              delete: "5m"
+            assign_generated_ipv6_cidr_block: true
+            default_security_group_deny_all: false
+            default_route_table_no_routes: false
+            default_network_acl_deny_all: true  
+    aws-dynamic-subnets:
+      vars:
+        group: 
+          network: 
+            availability_zones: ["us-east-1a", "us-east-1b", "us-east-1c"]
+            vpc_id: xxxxxx
+            igw_id: xxxxxx
+            ipv4_cidr_block: '172.16.0.0/16'
+            nat_gateway_enabled: false
+            nat_instance_enabled: true
+            nat_instance_type: t3.nano
+            max_nats: 1
+    aws-alb:
+      vars:
+        group: 
+          web:
+            internal: false
+            http_enabled: false
+            http_redirect: true
+            https_enabled: true
+            access_logs_enabled: true
+            alb_access_logs_s3_bucket_force_destroy: true
+            alb_access_logs_s3_bucket_force_destroy_enabled: true
+            cross_zone_load_balancing_enabled: false
+            http2_enabled: true
+            idle_timeout: 60
+            ip_address_type: "ipv4"
+            deletion_protection_enabled: false
+            deregistration_delay: 15
+            health_check_path: "/"
+            health_check_timeout: 10
+            health_check_healthy_threshold: 2
+            health_check_unhealthy_threshold: 2
+            health_check_interval: 15
+            health_check_matcher: "200-399"
+            target_group_port: 8080
+            target_group_target_type: "ip"
+            stickiness:
+              cookie_duration: 60
+              enabled: true
