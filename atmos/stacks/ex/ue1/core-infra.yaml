@@ -1,7 +1,9 @@
+#Example Stack - Does function!
+
 vars:
   region: "us-east-1"
   availability_zones: ["us-east-1a", "us-east-1b", "us-east-1c"]
-  namespace: "prv"
+  namespace: "ex"
   stage: "dev"
   tenant: "infra"
 
